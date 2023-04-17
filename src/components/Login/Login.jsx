@@ -8,6 +8,7 @@ const Login = () => {
   const {LogInUser} = useContext(AuthContext);
   const [error,setError] = useState('');
   const location = useLocation();
+  const [show,setShow] = useState(false);
   console.log(location)
   const navigate = useNavigate();
   const from = location.state?.form?.pathname || '/'
@@ -45,7 +46,15 @@ const Login = () => {
                 <label className="label">
                   <span className="label-text">Password</span>
                 </label>
-                <input type="password" name='password' placeholder="password" className="input input-bordered" required/>
+
+                <input type={show ? "text" : "password"} name='password' placeholder="password" className="input input-bordered" required/>
+                <small>
+                  <p onClick={()=> setShow(!show)} className="cursor-pointer">
+                    {
+                      show ? <span>hide password</span> :<span>show password</span>
+                    }
+                  </p>
+                </small>
                 <label className="label">
                   <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
                 </label>
