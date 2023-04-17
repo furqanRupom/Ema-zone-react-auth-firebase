@@ -1,14 +1,31 @@
-import React from 'react';
-import { Link, useLoaderData } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useContext } from 'react';
+import { Link, useLoaderData, useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../Providers/AuthProviders';
+
 
 const Login = () => {
+  const {LogInUser} = useContext(AuthContext);
+  const [error,setError] = useState('');
+  const location = useLocation();
+  console.log(location)
+  const navigate = useNavigate();
+  const from = location.state?.form?.pathname || '/'
+  console.log(from)
 
   // form submit
   const handleFormLoginSubmit = (e)=>{
     e.preventDefault()
-    const email = e.target.email.value
-    const password = e.target.password.value
-    console.log(email,password)
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+    LogInUser(email,password)
+    .then(result =>{
+      console.log(result.user)
+      form.reset();
+      navigate(from,{replace:true})
+    })
+    .catch(error => setError(error))
   }
 
     return (
@@ -46,6 +63,9 @@ const Login = () => {
           </form>
 
             </div>
+            <small className="text-red-500">
+              {error}
+            </small>
         </div>
 
     );
